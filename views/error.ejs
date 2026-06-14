@@ -1,0 +1,17 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main>
+  <section class="section">
+    <div class="container">
+      <div class="empty-state">
+        <span class="error-code"><%= typeof error !== 'undefined' && error.status ? error.status : 500 %></span>
+        <h3><%= typeof message !== 'undefined' ? message : 'Something went wrong' %></h3>
+        <p>Let's get you back on track.</p>
+        <a href="/" class="btn btn-primary">Go Home</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

@@ -1,0 +1,31 @@
+<nav class="navbar">
+  <div class="container nav-container">
+    <a href="/" class="nav-logo">G<span class="logo-o">o</span><span class="logo-j">j</span><span class="logo-o">o</span></a>
+    <div class="nav-links">
+      <a href="/properties" class="nav-link">Browse</a>
+      <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+        <a href="/dashboard" class="nav-link nav-dashboard-link">
+          Dashboard
+          <% var totalNotifs = (typeof notifPending !== 'undefined' ? notifPending : 0) + (typeof notifConfirmations !== 'undefined' ? notifConfirmations : 0); %>
+          <% if (totalNotifs > 0) { %>
+            <span class="nav-badge"><%= totalNotifs %></span>
+          <% } %>
+        </a>
+        <a href="/bookings" class="nav-link">Bookings</a>
+        <% if (currentUser.role === 'host') { %>
+          <a href="/properties/new" class="nav-link nav-cta">List a Property</a>
+        <% } %>
+        <div class="nav-user">
+          <span class="nav-user-name"><%= currentUser.name.split(' ')[0] %></span>
+          <a href="/auth/logout" class="nav-link nav-logout">Logout</a>
+        </div>
+      <% } else { %>
+        <a href="/auth/login" class="nav-link">Login</a>
+        <a href="/auth/register" class="nav-link nav-cta">Register</a>
+      <% } %>
+    </div>
+    <button class="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>

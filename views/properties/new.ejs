@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>List Your Property</h1>
+      <p>Share your space with travelers from around the world.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container form-container">
+      <form action="/properties" method="POST" enctype="multipart/form-data" class="styled-form">
+        <div class="form-grid">
+          <div class="form-field form-field-full">
+            <label for="title">Property Title</label>
+            <input type="text" name="title" id="title" required placeholder="e.g. Sunset Villa with Pool">
+          </div>
+          <div class="form-field form-field-full">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="4" required placeholder="Describe your property, the neighborhood, and what makes it special..."></textarea>
+          </div>
+          <div class="form-field">
+            <label for="price">Price per Night ($)</label>
+            <input type="number" name="price" id="price" step="0.01" min="1" required placeholder="150">
+          </div>
+          <div class="form-field">
+            <label for="location">Location</label>
+            <input type="text" name="location" id="location" required placeholder="e.g. Addis Ababa, Ethiopia">
+          </div>
+          <div class="form-field">
+            <label for="bedrooms">Bedrooms</label>
+            <input type="number" name="bedrooms" id="bedrooms" min="1" required placeholder="2">
+          </div>
+          <div class="form-field">
+            <label for="bathrooms">Bathrooms</label>
+            <input type="number" name="bathrooms" id="bathrooms" min="1" required placeholder="1">
+          </div>
+          <div class="form-field">
+            <label for="max_guests">Max Guests</label>
+            <input type="number" name="max_guests" id="max_guests" min="1" required placeholder="4">
+          </div>
+          <div class="form-field">
+            <label for="image">Photo</label>
+            <input type="file" name="image" id="image" accept="image/*">
+          </div>
+          <div class="form-field form-field-full">
+            <label for="amenities">Amenities</label>
+            <input type="text" name="amenities" id="amenities" placeholder="WiFi, Pool, Parking, Kitchen (comma separated)">
+          </div>
+          <div class="form-action">
+            <button type="submit" class="btn btn-primary">List Property</button>
+            <a href="/dashboard" class="btn btn-outline">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

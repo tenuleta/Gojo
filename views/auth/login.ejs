@@ -1,0 +1,33 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>Welcome Back</h1>
+      <p>Login to your Gojo account.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container form-container form-container-sm">
+      <form action="/auth/login" method="POST" class="styled-form">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="form-error"><%= error %></div>
+        <% } %>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Login</button>
+        <p class="form-alt">Don't have an account? <a href="/auth/register">Register</a></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

@@ -1,0 +1,38 @@
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3 class="nav-logo">G<span class="logo-o">o</span><span class="logo-j">j</span><span class="logo-o">o</span></h3>
+          <p>Discover unique stays across Ethiopia. From highland lodges to lakeside retreats, find your perfect escape.</p>
+        </div>
+        <div class="footer-links">
+          <h4>Explore</h4>
+          <ul>
+            <li><a href="/properties">All Properties</a></li>
+            <li><a href="/properties?location=Addis%20Ababa">Addis Ababa</a></li>
+            <li><a href="/properties?location=Lalibela">Lalibela</a></li>
+            <li><a href="/properties?location=Simien%20Mountains">Simien Mountains</a></li>
+          </ul>
+        </div>
+        <div class="footer-links">
+          <h4>Account</h4>
+          <ul>
+            <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+              <li><a href="/dashboard">Dashboard</a></li>
+              <li><a href="/bookings">My Bookings</a></li>
+              <li><a href="/auth/logout">Logout</a></li>
+            <% } else { %>
+              <li><a href="/auth/login">Login</a></li>
+              <li><a href="/auth/register">Register</a></li>
+            <% } %>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2026 Gojo. All rights reserved. Built with Node.js + Express + EJS.</p>
+      </div>
+    </div>
+  </footer>
+  <script src="/js/main.js"></script>
+</body>
+</html>

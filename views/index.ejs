@@ -1,0 +1,126 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main>
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container hero-content">
+      <div class="hero-text">
+        <span class="hero-badge">Discover Ethiopia</span>
+        <h1>Find Your<br><em>Perfect Escape</em></h1>
+        <p>From the highlands to the valleys — unique stays curated for adventurers, dreamers, and storytellers.</p>
+        <div class="hero-search">
+          <form action="/properties" method="GET" class="search-form">
+            <div class="search-field">
+              <label for="location">Where to?</label>
+              <input type="text" id="location" name="location" placeholder="Search destinations..." autocomplete="off">
+            </div>
+            <div class="search-field">
+              <label for="guests">Guests</label>
+              <input type="number" id="guests" name="guests" min="1" max="20" placeholder="Any">
+            </div>
+            <button type="submit" class="search-btn">Explore</button>
+          </form>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card hero-card-1">
+          <div class="hero-card-img" style="background-image: url('https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&q=80')"></div>
+          <div class="hero-card-info">
+            <span class="hero-card-price">$150 <small>/ night</small></span>
+            <span class="hero-card-title">Sunset Villa</span>
+          </div>
+        </div>
+        <div class="hero-card hero-card-2">
+          <div class="hero-card-img" style="background-image: url('https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=400&q=80')"></div>
+          <div class="hero-card-info">
+            <span class="hero-card-price">$200 <small>/ night</small></span>
+            <span class="hero-card-title">Highland Lodge</span>
+          </div>
+        </div>
+        <div class="hero-card hero-card-3">
+          <div class="hero-card-img" style="background-image: url('https://images.unsplash.com/photo-1470770841072-f978cf4d019e?w=400&q=80')"></div>
+          <div class="hero-card-info">
+            <span class="hero-card-price">$65 <small>/ night</small></span>
+            <span class="hero-card-title">Mountain Retreat</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section featured-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Curated Collection</span>
+        <h2>Featured Stays</h2>
+        <p class="section-sub">Handpicked properties with character, comfort, and a story to tell.</p>
+      </div>
+      <div class="property-grid">
+        <% properties.forEach(function(property) { %>
+          <a href="/properties/<%= property.id %>" class="property-card">
+            <div class="property-card-image">
+              <div class="property-img" style="background-image: url('<%= property.image_url || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80' %>?w=500&q=80')"></div>
+              <div class="property-card-price">$<%= Number(property.price).toFixed(0) %><small>/night</small></div>
+            </div>
+            <div class="property-card-body">
+              <div class="property-card-meta">
+                <span><%= property.bedrooms %> bed</span>
+                <span>·</span>
+                <span><%= property.bathrooms %> bath</span>
+              </div>
+              <h3><%= property.title %></h3>
+              <p class="property-location"><%= property.location %></p>
+            </div>
+          </a>
+        <% }) %>
+      </div>
+      <div class="section-action">
+        <a href="/properties" class="btn btn-outline">View All Properties →</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section location-section">
+    <div class="container">
+      <div class="section-header">
+        <span class="section-label">Explore By</span>
+        <h2>Destination</h2>
+      </div>
+      <div class="location-grid">
+        <% locations.forEach(function(loc) { %>
+          <a href="/properties?location=<%= encodeURIComponent(loc.location) %>" class="location-card">
+            <h3><%= loc.location.split(',')[0] %></h3>
+            <span><%= loc.count %> properties</span>
+          </a>
+        <% }) %>
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta-section">
+    <div class="container">
+      <div class="cta-content">
+        <div class="cta-text">
+          <span class="section-label">Host With Us</span>
+          <h2>Share Your Space<br><em>With the World</em></h2>
+          <p>Turn your home into a destination. List your property and start hosting travelers from around the globe.</p>
+          <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+            <a href="/properties/new" class="btn btn-primary">List Your Property</a>
+          <% } else { %>
+            <a href="/auth/register" class="btn btn-primary">Get Started</a>
+          <% } %>
+        </div>
+        <div class="cta-visual">
+          <div class="cta-image-grid">
+            <div class="cta-img" style="background-image: url('https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=300&q=80')"></div>
+            <div class="cta-img" style="background-image: url('https://images.unsplash.com/photo-1540541338287-41700207dee6?w=300&q=80')"></div>
+            <div class="cta-img" style="background-image: url('https://images.unsplash.com/photo-1512917774080-9991f1c4c750?w=300&q=80')"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

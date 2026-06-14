@@ -1,0 +1,44 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>Create Account</h1>
+      <p>Join Gojo and start exploring.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container form-container form-container-sm">
+      <form action="/auth/register" method="POST" class="styled-form">
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="form-error"><%= error %></div>
+        <% } %>
+        <div class="form-field">
+          <label for="name">Full Name</label>
+          <input type="text" name="name" id="name" required placeholder="Jane Doe">
+        </div>
+        <div class="form-field">
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" required placeholder="jane@example.com">
+        </div>
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" required minlength="6" placeholder="At least 6 characters">
+        </div>
+        <div class="form-field">
+          <label for="role">I want to...</label>
+          <select name="role" id="role">
+            <option value="guest">Book Stays</option>
+            <option value="host">Host Properties</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-primary btn-full">Create Account</button>
+        <p class="form-alt">Already have an account? <a href="/auth/login">Login</a></p>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

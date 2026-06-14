@@ -1,0 +1,66 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>Edit Property</h1>
+      <p>Update your listing details.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container form-container">
+      <form action="/properties/<%= property.id %>?_method=PUT" method="POST" enctype="multipart/form-data" class="styled-form">
+        <input type="hidden" name="existing_image" value="<%= property.image_url %>">
+        <div class="form-grid">
+          <div class="form-field form-field-full">
+            <label for="title">Property Title</label>
+            <input type="text" name="title" id="title" required value="<%= property.title %>">
+          </div>
+          <div class="form-field form-field-full">
+            <label for="description">Description</label>
+            <textarea name="description" id="description" rows="4" required><%= property.description %></textarea>
+          </div>
+          <div class="form-field">
+            <label for="price">Price per Night ($)</label>
+            <input type="number" name="price" id="price" step="0.01" min="1" required value="<%= Number(property.price).toFixed(2) %>">
+          </div>
+          <div class="form-field">
+            <label for="location">Location</label>
+            <input type="text" name="location" id="location" required value="<%= property.location %>">
+          </div>
+          <div class="form-field">
+            <label for="bedrooms">Bedrooms</label>
+            <input type="number" name="bedrooms" id="bedrooms" min="1" required value="<%= property.bedrooms %>">
+          </div>
+          <div class="form-field">
+            <label for="bathrooms">Bathrooms</label>
+            <input type="number" name="bathrooms" id="bathrooms" min="1" required value="<%= property.bathrooms %>">
+          </div>
+          <div class="form-field">
+            <label for="max_guests">Max Guests</label>
+            <input type="number" name="max_guests" id="max_guests" min="1" required value="<%= property.max_guests %>">
+          </div>
+          <div class="form-field">
+            <label for="image">Photo</label>
+            <input type="file" name="image" id="image" accept="image/*">
+            <% if (property.image_url) { %>
+              <p style="font-size:0.8rem;color:var(--gray-400);margin-top:4px;">Leave empty to keep current photo.</p>
+            <% } %>
+          </div>
+          <div class="form-field form-field-full">
+            <label for="amenities">Amenities</label>
+            <input type="text" name="amenities" id="amenities" value="<%= (property.amenities || []).join(', ') %>" placeholder="WiFi, Pool, Parking, Kitchen (comma separated)">
+          </div>
+          <div class="form-action">
+            <button type="submit" class="btn btn-primary">Save Changes</button>
+            <a href="/properties/<%= property.id %>" class="btn btn-outline">Cancel</a>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

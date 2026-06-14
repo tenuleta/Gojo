@@ -1,0 +1,57 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>My Bookings</h1>
+      <p>Manage your reservations.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <% if (bookings.length === 0) { %>
+        <div class="empty-state">
+          <h3>No bookings yet</h3>
+          <p>Browse properties and book your first stay.</p>
+          <a href="/properties" class="btn btn-primary">Browse Properties</a>
+        </div>
+      <% } else { %>
+        <div class="booking-cards-full">
+          <% bookings.forEach(function(b) { %>
+            <div class="booking-card-full">
+              <div class="booking-full-img" style="background-image: url('<%= b.image_url || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80' %>')"></div>
+              <div class="booking-full-info">
+                <h3><a href="/properties/<%= b.property_id %>"><%= b.property_title %></a></h3>
+                <p class="booking-full-location"><%= b.location %></p>
+                <div class="booking-full-dates">
+                  <div class="date-block">
+                    <span class="date-label">Check In</span>
+                    <span class="date-value"><%= new Date(b.check_in).toLocaleDateString() %></span>
+                  </div>
+                  <span class="date-arrow">→</span>
+                  <div class="date-block">
+                    <span class="date-label">Check Out</span>
+                    <span class="date-value"><%= new Date(b.check_out).toLocaleDateString() %></span>
+                  </div>
+                </div>
+                <div class="booking-full-footer">
+                  <span class="booking-full-price">$<%= Number(b.total_price).toFixed(2) %></span>
+                  <span class="status status-<%= b.status %>"><%= b.status %></span>
+                  <% if (b.status === 'pending') { %>
+                    <form action="/bookings/<%= b.id %>/cancel?_method=PUT" method="POST" style="display:inline" class="cancel-form">
+                      <button class="btn-sm btn-sm-danger">Cancel</button>
+                    </form>
+                  <% } %>
+                </div>
+              </div>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>

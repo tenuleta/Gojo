@@ -1,0 +1,70 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>Browse Properties</h1>
+      <p>Find your perfect stay across Ethiopia.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <form action="/properties" method="GET" class="filter-form">
+        <div class="filter-grid">
+          <div class="filter-field">
+            <label for="location">Location</label>
+            <input type="text" id="location" name="location" value="<%= typeof filters.location !== 'undefined' ? filters.location : '' %>" placeholder="Any destination">
+          </div>
+          <div class="filter-field">
+            <label for="min_price">Min Price</label>
+            <input type="number" id="min_price" name="min_price" value="<%= typeof filters.min_price !== 'undefined' ? filters.min_price : '' %>" placeholder="$0" min="0">
+          </div>
+          <div class="filter-field">
+            <label for="max_price">Max Price</label>
+            <input type="number" id="max_price" name="max_price" value="<%= typeof filters.max_price !== 'undefined' ? filters.max_price : '' %>" placeholder="$1000" min="0">
+          </div>
+          <div class="filter-field">
+            <label for="guests">Guests</label>
+            <input type="number" id="guests" name="guests" value="<%= typeof filters.guests !== 'undefined' ? filters.guests : '' %>" placeholder="Any" min="1">
+          </div>
+          <div class="filter-action">
+            <button type="submit" class="btn btn-primary">Filter</button>
+            <a href="/properties" class="btn btn-outline">Clear</a>
+          </div>
+        </div>
+      </form>
+
+      <% if (properties.length === 0) { %>
+        <div class="empty-state">
+          <h3>No properties found</h3>
+          <p>Try adjusting your filters or explore other destinations.</p>
+          <a href="/properties" class="btn btn-primary">View All</a>
+        </div>
+      <% } else { %>
+        <div class="property-grid">
+          <% properties.forEach(function(property) { %>
+            <a href="/properties/<%= property.id %>" class="property-card">
+              <div class="property-card-image">
+                <div class="property-img" style="background-image: url('<%= property.image_url || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80' %>')"></div>
+                <div class="property-card-price">$<%= Number(property.price).toFixed(0) %><small>/night</small></div>
+              </div>
+              <div class="property-card-body">
+                <div class="property-card-meta">
+                  <span><%= property.bedrooms %> bed</span>
+                  <span>·</span>
+                  <span><%= property.bathrooms %> bath</span>
+                </div>
+                <h3><%= property.title %></h3>
+                <p class="property-location"><%= property.location %></p>
+              </div>
+            </a>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

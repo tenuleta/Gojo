@@ -1,0 +1,212 @@
+<%- include('partials/header') %>
+<%- include('partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>Dashboard</h1>
+      <p>Welcome back, <%= currentUser.name.split(' ')[0] %>.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <% if (currentUser.role === 'host') { %>
+        <% if (typeof notifPending !== 'undefined' && notifPending > 0) { %>
+          <div class="dashboard-section">
+            <div class="dashboard-header">
+              <h2>Pending Requests <% if (notifPending > 0) { %><span class="notification-badge"><%= notifPending %></span><% } %></h2>
+            </div>
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Guest</th>
+                    <th>Property</th>
+                    <th>Check In</th>
+                    <th>Check Out</th>
+                    <th>Total</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% hostBookings.filter(b => b.status === 'pending').forEach(function(b) { %>
+                    <tr>
+                      <td><%= b.guest_name %></td>
+                      <td><%= b.property_title %></td>
+                      <td><%= new Date(b.check_in).toLocaleDateString() %></td>
+                      <td><%= new Date(b.check_out).toLocaleDateString() %></td>
+                      <td>$<%= Number(b.total_price).toFixed(2) %></td>
+                      <td>
+                        <form action="/bookings/<%= b.id %>/confirm?_method=PUT" method="POST" style="display:inline">
+                          <button class="btn-sm btn-sm-success">Accept</button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="dashboard-section">
+          <div class="dashboard-header">
+            <h2>My Properties</h2>
+            <a href="/properties/new" class="btn btn-primary btn-sm">+ New Property</a>
+          </div>
+          <% if (myProperties.length === 0) { %>
+            <div class="empty-state">
+              <h3>No properties yet</h3>
+              <p>List your first property to start hosting.</p>
+              <a href="/properties/new" class="btn btn-primary">List a Property</a>
+            </div>
+          <% } else { %>
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Title</th>
+                    <th>Location</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% myProperties.forEach(function(p) { %>
+                    <tr>
+                      <td><a href="/properties/<%= p.id %>"><%= p.title %></a></td>
+                      <td><%= p.location %></td>
+                      <td>$<%= Number(p.price).toFixed(2) %>/night</td>
+                      <td class="actions-cell">
+                        <a href="/properties/<%= p.id %>/edit" class="btn-sm">Edit</a>
+                        <form action="/properties/<%= p.id %>?_method=DELETE" method="POST" style="display:inline" onsubmit="return confirm('Delete this property?')">
+                          <button class="btn-sm btn-sm-danger">Delete</button>
+                        </form>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+
+        <div class="dashboard-section">
+          <div class="dashboard-header">
+            <h2>Booking History</h2>
+          </div>
+          <% if (hostBookings.length === 0) { %>
+            <div class="empty-state">
+              <p>No bookings yet.</p>
+            </div>
+          <% } else { %>
+            <div class="table-wrapper">
+              <table class="styled-table">
+                <thead>
+                  <tr>
+                    <th>Guest</th>
+                    <th>Property</th>
+                    <th>Dates</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% hostBookings.forEach(function(b) { %>
+                    <tr>
+                      <td><%= b.guest_name %></td>
+                      <td><%= b.property_title %></td>
+                      <td><%= new Date(b.check_in).toLocaleDateString() %> – <%= new Date(b.check_out).toLocaleDateString() %></td>
+                      <td>$<%= Number(b.total_price).toFixed(2) %></td>
+                      <td><span class="status status-<%= b.status %>"><%= b.status %></span></td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+
+      <% if (currentUser.role === 'guest') { %>
+        <% if (typeof notifConfirmations !== 'undefined' && notifConfirmations > 0) { %>
+          <div class="dashboard-section">
+            <div class="dashboard-header">
+              <h2>Recent Confirmations <% if (notifConfirmations > 0) { %><span class="notification-badge"><%= notifConfirmations %></span><% } %></h2>
+            </div>
+            <div class="booking-cards-full">
+              <% myBookings.filter(b => b.status === 'confirmed').slice(0, 3).forEach(function(b) { %>
+                <div class="booking-card-full">
+                  <div class="booking-full-img" style="background-image: url('<%= b.image_url || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80' %>')"></div>
+                  <div class="booking-full-info">
+                    <h3><a href="/properties/<%= b.property_id %>"><%= b.property_title %></a></h3>
+                    <p class="booking-full-location"><%= b.location %></p>
+                    <div class="booking-full-dates">
+                      <div class="date-block">
+                        <span class="date-label">Check In</span>
+                        <span class="date-value"><%= new Date(b.check_in).toLocaleDateString() %></span>
+                      </div>
+                      <span class="date-arrow">→</span>
+                      <div class="date-block">
+                        <span class="date-label">Check Out</span>
+                        <span class="date-value"><%= new Date(b.check_out).toLocaleDateString() %></span>
+                      </div>
+                    </div>
+                    <div class="booking-full-footer">
+                      <span class="booking-full-price">$<%= Number(b.total_price).toFixed(2) %></span>
+                      <span class="status status-<%= b.status %>"><%= b.status %></span>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+        <div class="dashboard-section">
+          <div class="dashboard-header">
+            <h2>My Bookings</h2>
+            <a href="/bookings" class="btn-sm">View All</a>
+          </div>
+          <% if (myBookings.length === 0) { %>
+            <div class="empty-state">
+              <h3>No bookings yet</h3>
+              <p>Browse properties and book your first stay.</p>
+              <a href="/properties" class="btn btn-primary">Browse Properties</a>
+            </div>
+          <% } else { %>
+            <div class="booking-cards-full">
+              <% myBookings.slice(0, 5).forEach(function(b) { %>
+                <div class="booking-card-full">
+                  <div class="booking-full-img" style="background-image: url('<%= b.image_url || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80' %>')"></div>
+                  <div class="booking-full-info">
+                    <h3><a href="/properties/<%= b.property_id %>"><%= b.property_title %></a></h3>
+                    <p class="booking-full-location"><%= b.location %></p>
+                    <div class="booking-full-dates">
+                      <div class="date-block">
+                        <span class="date-label">Check In</span>
+                        <span class="date-value"><%= new Date(b.check_in).toLocaleDateString() %></span>
+                      </div>
+                      <span class="date-arrow">→</span>
+                      <div class="date-block">
+                        <span class="date-label">Check Out</span>
+                        <span class="date-value"><%= new Date(b.check_out).toLocaleDateString() %></span>
+                      </div>
+                    </div>
+                    <div class="booking-full-footer">
+                      <span class="booking-full-price">$<%= Number(b.total_price).toFixed(2) %></span>
+                      <span class="status status-<%= b.status %>"><%= b.status %></span>
+                    </div>
+                  </div>
+                </div>
+              <% }) %>
+            </div>
+          <% } %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('partials/footer') %>
