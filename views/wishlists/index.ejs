@@ -1,0 +1,50 @@
+<%- include('../partials/header') %>
+<%- include('../partials/navbar') %>
+
+<main>
+  <section class="section page-header">
+    <div class="container">
+      <h1>My Wishlist</h1>
+      <p>Properties you've saved for later.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <% if (properties.length === 0) { %>
+        <div class="empty-state">
+          <h3>Your wishlist is empty</h3>
+          <p>Browse properties and save the ones you love.</p>
+          <a href="/properties" class="btn btn-primary">Browse Properties</a>
+        </div>
+      <% } else { %>
+        <div class="property-grid">
+          <% properties.forEach(function(property) { %>
+            <div class="property-card">
+              <a href="/properties/<%= property.id %>">
+                <div class="property-card-image">
+                  <div class="property-img" style="background-image: url('<%= property.image_url || 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&q=80' %>')"></div>
+                  <div class="property-card-price">$<%= Number(property.price).toFixed(0) %><small>/night</small></div>
+                </div>
+                <div class="property-card-body">
+                  <div class="property-card-meta">
+                    <span><%= property.bedrooms %> bed</span>
+                    <span>·</span>
+                    <span><%= property.bathrooms %> bath</span>
+                  </div>
+                  <h3><%= property.title %></h3>
+                  <p class="property-location"><%= property.location %></p>
+                </div>
+              </a>
+              <form action="/wishlists/<%= property.id %>?_method=DELETE" method="POST" class="wishlist-remove-form">
+                <button class="btn-sm btn-sm-danger">Remove from Wishlist</button>
+              </form>
+            </div>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+  </section>
+</main>
+
+<%- include('../partials/footer') %>

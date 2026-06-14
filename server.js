@@ -13,6 +13,7 @@ const authRoutes = require('./routes/auth');
 const propertyRoutes = require('./routes/properties');
 const bookingRoutes = require('./routes/bookings');
 const reviewRoutes = require('./routes/reviews');
+const wishlistRoutes = require('./routes/wishlists');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -40,6 +41,7 @@ app.use('/auth', authRoutes);
 app.use('/properties', propertyRoutes);
 app.use('/bookings', bookingRoutes);
 app.use('/reviews', reviewRoutes);
+app.use('/wishlists', wishlistRoutes);
 
 app.use((req, res) => {
   res.status(404).render('error', {
