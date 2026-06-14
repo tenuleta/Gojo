@@ -1,0 +1,21 @@
+{
+  "name": "gojo",
+  "version": "1.0.0",
+  "description": "Airbnb-style booking platform built with Node.js, Express, EJS, and PostgreSQL",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "connect-pg-simple": "^9.0.1",
+    "dotenv": "^16.4.5",
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "express-session": "^1.18.0",
+    "method-override": "^3.0.0",
+    "multer": "^2.1.1",
+    "pg": "^8.13.0"
+  }
+}
