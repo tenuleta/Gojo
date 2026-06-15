@@ -67,3 +67,42 @@ CREATE TABLE "session" (
 ALTER TABLE "session" ADD CONSTRAINT "session_pkey" PRIMARY KEY ("sid") NOT DEFERRABLE INITIALLY IMMEDIATE;
 
 CREATE INDEX "IDX_session_expire" ON "session" ("expire");
+
+
+
+
+--INDEXES for faster queries--
+CREATE INDEX IF NOT EXISTS idx_properties_price ON properties(price);
+CREATE INDEX IF NOT EXISTS idx_properties_location ON properties(location);
+CREATE INDEX IF NOT EXISTS idx_bookings_dates ON bookings(check_in, check_out);
+CREATE INDEX IF NOT EXISTS idx_bookings_status ON bookings(status);
+CREATE INDEX IF NOT EXISTS idx_reviews_rating ON reviews(rating);
+
+-- AUTO-UPDATE updated_at timestamp for properties
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+CREATE TRIGGER trigger_update_properties_updated_at 
+    BEFORE UPDATE ON properties 
+    FOR EACH ROW 
+    EXECUTE FUNCTION update_updated_at_column();
+
+-- VALIDATION: Prevent booking if check_out is before check_in
+ALTER TABLE bookings 
+    ADD CONSTRAINT check_dates_valid 
+    CHECK (check_out > check_in);
+
+-- COMMENT on tables for documentation
+COMMENT ON TABLE users IS 'Stores user accounts (guests and hosts)';
+COMMENT ON TABLE properties IS 'Property listings created by hosts';
+COMMENT ON TABLE bookings IS 'Booking transactions between guests and properties';
+COMMENT ON TABLE reviews IS 'Guest reviews and ratings for properties';
+
+COMMENT ON COLUMN users.role IS 'guest = can book stays, host = can list properties';
+COMMENT ON COLUMN bookings.status IS 'pending = awaiting host approval, confirmed = approved, cancelled = cancelled by guest';
+COMMENT ON COLUMN reviews.rating IS '1-5 star rating, 5 is best';
