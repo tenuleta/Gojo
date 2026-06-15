@@ -106,3 +106,19 @@ COMMENT ON TABLE reviews IS 'Guest reviews and ratings for properties';
 COMMENT ON COLUMN users.role IS 'guest = can book stays, host = can list properties';
 COMMENT ON COLUMN bookings.status IS 'pending = awaiting host approval, confirmed = approved, cancelled = cancelled by guest';
 COMMENT ON COLUMN reviews.rating IS '1-5 star rating, 5 is best';
+
+
+-- =====================================================
+-- VIEW: Property booking summary
+-- =====================================================
+CREATE OR REPLACE VIEW property_booking_summary AS
+SELECT 
+    p.id AS property_id,
+    p.title,
+    COUNT(b.id) AS total_bookings,
+    COALESCE(AVG(r.rating), 0) AS avg_rating,
+    COUNT(r.id) AS review_count
+FROM properties p
+LEFT JOIN bookings b ON p.id = b.property_id AND b.status = 'confirmed'
+LEFT JOIN reviews r ON p.id = r.property_id
+GROUP BY p.id, p.title;
