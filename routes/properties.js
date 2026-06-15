@@ -94,12 +94,19 @@ router.get('/:id', async (req, res, next) => {
           [req.session.userId, req.params.id]
         )
       : { rows: [] };
+      const wishlisted = req.session.userId
+      ? await db.query(
+          'SELECT id FROM wishlists WHERE user_id = $1 AND property_id = $2',
+          [req.session.userId, req.params.id]
+        )
+      : { rows: [] };
 
     res.render('properties/show', {
       title: property.rows[0].title,
       property: property.rows[0],
       reviews: reviews.rows,
       userBookings: userBookings.rows,
+      isWishlisted: wishlisted.rows.length > 0,
     });
   } catch (err) {
     next(err);

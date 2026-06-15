@@ -122,6 +122,17 @@
           <div class="booking-card">
             <h3>Book This Stay</h3>
             <% if (typeof currentUser !== 'undefined' && currentUser) { %>
+              <% if (isWishlisted) { %>
+                <form action="/wishlists/<%= property.id %>?_method=DELETE" method="POST" style="margin-bottom:12px;">
+                  <button type="submit" class="btn btn-outline btn-full">♥ Remove from Wishlist</button>
+                </form>
+              <% } else { %>
+                <form action="/wishlists/<%= property.id %>" method="POST" style="margin-bottom:12px;">
+                  <button type="submit" class="btn btn-outline btn-full">♡ Save to Wishlist</button>
+                </form>
+              <% } %>
+            <% } %>
+            <% if (typeof currentUser !== 'undefined' && currentUser) { %>
               <form action="/bookings" method="POST">
                 <input type="hidden" name="property_id" value="<%= property.id %>">
                 <div class="booking-field">
