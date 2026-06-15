@@ -15,6 +15,7 @@ A server-side rendered (SSR) web application for an Airbnb-style booking platfor
 - Filter and search functionality
 - Responsive design with mobile navigation
 - EJS partials for layout reuse (header, footer, navbar)
+- Wishlist — guests can save properties and view/remove them on a dedicated page
 
 ## Technologies Used
 
@@ -115,6 +116,7 @@ gojo/
 │   ├── properties.js         # Property CRUD
 │   ├── bookings.js           # Booking management
 │   └── reviews.js            # Review creation
+│   └── wishlists.js          # Wishlist add/remove/view
 ├── views/
 │   ├── partials/             # EJS partials (header, footer, navbar)
 │   ├── index.ejs             # Home page
@@ -123,6 +125,7 @@ gojo/
 │   ├── error.ejs             # Error page
 │   ├── auth/                 # Login and register pages
 │   └── properties/           # Property list, detail, create, edit
+│   └── wishlists/            # My Wishlist page
 ├── public/
 │   ├── css/style.css         # Stylesheet
 │   └── js/main.js            # Client-side JavaScript
@@ -148,3 +151,4 @@ gojo/
 - [x] PostgreSQL database integration
 - [x] EJS partials/layout reuse (header, footer, navbar)
 - [x] GitHub repository with meaningful commits
+- [x] Wishlist feature (additional, beyond core requirements)
