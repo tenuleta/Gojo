@@ -108,9 +108,9 @@ COMMENT ON COLUMN bookings.status IS 'pending = awaiting host approval, confirme
 COMMENT ON COLUMN reviews.rating IS '1-5 star rating, 5 is best';
 
 
--- =====================================================
+
 -- VIEW: Property booking summary
--- =====================================================
+
 CREATE OR REPLACE VIEW property_booking_summary AS
 SELECT 
     p.id AS property_id,
@@ -122,3 +122,26 @@ FROM properties p
 LEFT JOIN bookings b ON p.id = b.property_id AND b.status = 'confirmed'
 LEFT JOIN reviews r ON p.id = r.property_id
 GROUP BY p.id, p.title;
+
+
+
+-- FUNCTION: Check property availability
+
+CREATE OR REPLACE FUNCTION is_property_available(
+    p_property_id INTEGER,
+    p_check_in DATE,
+    p_check_out DATE
+)
+RETURNS BOOLEAN AS $$
+DECLARE
+    conflicting_bookings INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO conflicting_bookings
+    FROM bookings
+    WHERE property_id = p_property_id
+    AND status = 'confirmed'
+    AND daterange(check_in, check_out, '[]') && daterange(p_check_in, p_check_out, '[]');
+    
+    RETURN conflicting_bookings = 0;
+END;
+$$ LANGUAGE plpgsql;
